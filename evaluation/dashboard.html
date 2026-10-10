@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sadhguru RAG — LLM Evaluation Dashboard</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #242837;
+    --border: #2e3347;
+    --text: #e4e6f0;
+    --text-dim: #8b8fa3;
+    --accent: #6c63ff;
+    --accent-glow: rgba(108,99,255,0.15);
+    --green: #22c55e;
+    --green-bg: rgba(34,197,94,0.12);
+    --red: #ef4444;
+    --red-bg: rgba(239,68,68,0.12);
+    --yellow: #f59e0b;
+    --yellow-bg: rgba(245,158,11,0.12);
+    --blue: #3b82f6;
+    --blue-bg: rgba(59,130,246,0.12);
+    --cyan: #06b6d4;
+    --orange: #f97316;
+    --purple: #a855f7;
+    --radius: 12px;
+    --shadow: 0 2px 16px rgba(0,0,0,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #1a1d27 0%, #242837 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header-meta {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  .header-meta span {
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+  .header-meta .badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* File Upload */
+  .upload-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 32px;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .upload-box {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 48px 64px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: var(--surface);
+    max-width: 500px;
+    width: 100%;
+  }
+  .upload-box:hover {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+  }
+  .upload-box h2 { font-size: 18px; margin-bottom: 8px; }
+  .upload-box p { color: var(--text-dim); font-size: 14px; }
+  #file-input { display: none; }
+  .demo-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.15s;
+  }
+  .demo-btn:hover { transform: scale(1.04); }
+
+  /* Main */
+  .dashboard { display: none; }
+  .container { max-width: 1400px; margin: 0 auto; padding: 24px 32px; }
+
+  /* Overall Score */
+  .score-hero {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+  .overall-ring {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow);
+  }
+  .ring-container {
+    position: relative;
+    width: 160px;
+    height: 160px;
+  }
+  .ring-container svg { transform: rotate(-90deg); }
+  .ring-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .ring-label .score { font-size: 36px; font-weight: 800; }
+  .ring-label .grade { font-size: 16px; color: var(--text-dim); }
+  .overall-ring h3 { margin-top: 16px; font-size: 14px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* Category Cards */
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+  }
+  .cat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+  .cat-card:hover { border-color: var(--accent); }
+  .cat-card .cat-name { font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .cat-card .cat-score { font-size: 28px; font-weight: 700; }
+  .cat-card .cat-bar { height: 4px; background: var(--surface2); border-radius: 2px; margin-top: 12px; overflow: hidden; }
+  .cat-card .cat-bar-fill { height: 100%; border-radius: 2px; transition: width 0.8s ease; }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 24px;
+    background: var(--surface);
+    padding: 4px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .tab {
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-dim);
+    transition: all 0.2s;
+    white-space: nowrap;
+    border: none;
+    background: none;
+  }
+  .tab:hover { color: var(--text); background: var(--surface2); }
+  .tab.active { background: var(--accent); color: white; }
+
+  /* Sections */
+  .section { display: none; animation: fadeIn 0.3s ease; }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+  .card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card h3 .icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+
+  /* Metric Rows */
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .metric-item {
+    background: var(--surface2);
+    padding: 16px;
+    border-radius: 10px;
+  }
+  .metric-item .label { font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+  .metric-item .value { font-size: 24px; font-weight: 700; margin-top: 4px; }
+  .metric-item .sub { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dim);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(46,51,71,0.5);
+    vertical-align: top;
+  }
+  tr:hover td { background: var(--surface2); }
+
+  /* Status Badges */
+  .pass { color: var(--green); }
+  .fail { color: var(--red); }
+  .warn { color: var(--yellow); }
+  .badge-pass {
+    background: var(--green-bg);
+    color: var(--green);
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .badge-fail {
+    background: var(--red-bg);
+    color: var(--red);
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .badge-warn {
+    background: var(--yellow-bg);
+    color: var(--yellow);
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .badge-info {
+    background: var(--blue-bg);
+    color: var(--blue);
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  /* Bar Charts */
+  .bar-chart { display: flex; flex-direction: column; gap: 10px; }
+  .bar-row { display: flex; align-items: center; gap: 12px; }
+  .bar-label { width: 140px; font-size: 13px; color: var(--text-dim); text-align: right; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 24px; background: var(--surface2); border-radius: 6px; overflow: hidden; position: relative; }
+  .bar-fill { height: 100%; border-radius: 6px; transition: width 1s ease; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 600; color: white; min-width: fit-content; }
+  .bar-value { width: 60px; text-align: right; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+
+  /* Latency Heatmap */
+  .heatmap { display: grid; gap: 4px; }
+  .heat-cell {
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  /* Confusion Matrix */
+  .confusion-matrix {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr;
+    gap: 2px;
+    max-width: 320px;
+  }
+  .cm-cell {
+    padding: 16px;
+    text-align: center;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 20px;
+  }
+  .cm-header {
+    padding: 10px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* Faithfulness Detail */
+  .faith-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+  .faith-card.low-faith {
+    border-left: 4px solid var(--red);
+  }
+  .faith-card.high-faith {
+    border-left: 4px solid var(--green);
+  }
+  .faith-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .faith-header .qid { font-weight: 700; font-size: 14px; }
+  .faith-header .scores { display: flex; gap: 12px; }
+  .faith-question {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+  .faith-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .faith-col h4 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .faith-col .text-block {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text);
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 8px;
+  }
+  .faith-col .ctx-source {
+    font-size: 11px;
+    color: var(--cyan);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .faith-col .ctx-block {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .faith-col .ctx-block:last-child { border-bottom: none; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .score-hero { grid-template-columns: 1fr; }
+    .container { padding: 16px; }
+    .header { padding: 16px; }
+    .metric-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Upload Screen -->
+<div id="upload-screen" class="upload-section">
+  <div class="upload-box" onclick="document.getElementById('file-input').click()">
+    <h2>Upload Evaluation Report</h2>
+    <p>Drop or click to load report.json from the evaluation runner</p>
+    <input type="file" id="file-input" accept=".json" onchange="loadReport(event)">
+  </div>
+  <div style="color: var(--text-dim); font-size: 13px;">or</div>
+  <button class="demo-btn" onclick="loadDemo()">Load Demo Data</button>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard" class="dashboard">
+  <div class="header">
+    <h1>Sadhguru RAG — LLM Evaluation</h1>
+    <div class="header-meta">
+      <span id="meta-time"></span>
+      <span id="meta-cases"></span>
+      <span id="meta-grade" class="badge"></span>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Overall Score Hero -->
+    <div class="score-hero">
+      <div class="overall-ring">
+        <div class="ring-container">
+          <svg width="160" height="160" viewBox="0 0 160 160">
+            <circle cx="80" cy="80" r="70" fill="none" stroke="var(--surface2)" stroke-width="10"/>
+            <circle id="score-ring" cx="80" cy="80" r="70" fill="none" stroke="var(--accent)" stroke-width="10"
+              stroke-dasharray="440" stroke-dashoffset="440" stroke-linecap="round"/>
+          </svg>
+          <div class="ring-label">
+            <div class="score" id="overall-score">—</div>
+            <div class="grade" id="overall-grade">—</div>
+          </div>
+        </div>
+        <h3>Overall RAG Score</h3>
+      </div>
+
+      <div class="cat-grid" id="category-cards"></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs" id="tab-bar"></div>
+
+    <!-- Section: Guardrails -->
+    <div class="section" id="sec-guardrails">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+        <div class="card">
+          <h3><span class="icon" style="background:var(--green-bg);color:var(--green);">T</span> Topic Classification</h3>
+          <div class="metric-grid" id="guardrail-metrics"></div>
+        </div>
+        <div class="card">
+          <h3><span class="icon" style="background:var(--blue-bg);color:var(--blue);">C</span> Confusion Matrix</h3>
+          <div id="confusion-matrix"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3><span class="icon" style="background:var(--purple);color:white;">V</span> Input & Output Validation</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+          <div id="input-val-results"></div>
+          <div id="output-val-results"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3><span class="icon" style="background:var(--yellow-bg);color:var(--yellow);">D</span> Topic Classification Details</h3>
+        <div class="table-wrap" id="guardrail-table"></div>
+      </div>
+    </div>
+
+    <!-- Section: Retrieval -->
+    <div class="section" id="sec-retrieval">
+      <div class="card">
+        <h3><span class="icon" style="background:var(--blue-bg);color:var(--blue);">R</span> Retrieval Quality Metrics</h3>
+        <div class="metric-grid" id="retrieval-metrics"></div>
+      </div>
+      <div class="card">
+        <h3><span class="icon" style="background:var(--cyan);color:white;">B</span> Per-Query Retrieval Scores</h3>
+        <div class="bar-chart" id="retrieval-bars"></div>
+      </div>
+      <div class="card">
+        <h3><span class="icon" style="background:var(--accent-glow);color:var(--accent);">T</span> Retrieval Case Details</h3>
+        <div class="table-wrap" id="retrieval-table"></div>
+      </div>
+    </div>
+
+    <!-- Section: Generation -->
+    <div class="section" id="sec-generation">
+      <div class="card">
+        <h3><span class="icon" style="background:var(--green-bg);color:var(--green);">G</span> Generation Quality Metrics</h3>
+        <div class="metric-grid" id="generation-metrics"></div>
+      </div>
+      <div class="card">
+        <h3><span class="icon" style="background:var(--accent-glow);color:var(--accent);">Q</span> Per-Query Generation Quality</h3>
+        <div class="bar-chart" id="generation-bars"></div>
+      </div>
+      <div class="card">
+        <h3><span class="icon" style="background:var(--orange);color:white;">A</span> Answer Previews</h3>
+        <div class="table-wrap" id="generation-table"></div>
+      </div>
+      <div class="card">
+        <h3><span class="icon" style="background:var(--red-bg);color:var(--red);">F</span> Faithfulness Detail — Answer vs Context</h3>
+        <p style="color:var(--text-dim);font-size:13px;margin-bottom:16px;">Each row shows the LLM answer alongside the retrieved context. Highlighted rows have low faithfulness (answer not grounded in context).</p>
+        <div id="faithfulness-detail"></div>
+      </div>
+    </div>
+
+    <!-- Section: Hallucination -->
+    <div class="section" id="sec-hallucination">
+      <div class="card">
+        <h3><span class="icon" style="background:var(--red-bg);color:var(--red);">H</span> Hallucination Analysis</h3>
+        <div class="metric-grid" id="hallucination-metrics"></div>
+      </div>
+      <div class="card">
+        <h3><span class="icon" style="background:var(--yellow-bg);color:var(--yellow);">F</span> Flagged Cases</h3>
+        <div class="table-wrap" id="hallucination-table"></div>
+      </div>
+    </div>
+
+    <!-- Section: Latency -->
+    <div class="section" id="sec-latency">
+      <div class="card">
+        <h3><span class="icon" style="background:var(--cyan);color:white;">L</span> Pipeline Latency Overview</h3>
+        <div class="metric-grid" id="latency-metrics"></div>
+      </div>
+      <div class="card">
+        <h3><span class="icon" style="background:var(--blue-bg);color:var(--blue);">S</span> Stage Breakdown</h3>
+        <div class="bar-chart" id="latency-bars"></div>
+      </div>
+      <div class="card">
+        <h3><span class="icon" style="background:var(--purple);color:white;">Q</span> Per-Query Latency</h3>
+        <div class="table-wrap" id="latency-table"></div>
+      </div>
+    </div>
+
+    <!-- Section: Robustness -->
+    <div class="section" id="sec-robustness">
+      <div class="card">
+        <h3><span class="icon" style="background:var(--orange);color:white;">R</span> Robustness Summary</h3>
+        <div class="metric-grid" id="robustness-metrics"></div>
+      </div>
+      <div class="card">
+        <h3><span class="icon" style="background:var(--accent-glow);color:var(--accent);">T</span> Robustness Test Results</h3>
+        <div class="table-wrap" id="robustness-table"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let DATA = null;
+
+function loadReport(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    DATA = JSON.parse(e.target.result);
+    render();
+  };
+  reader.readAsText(file);
+}
+
+function loadDemo() {
+  // Generate realistic demo data
+  DATA = generateDemoData();
+  render();
+}
+
+function render() {
+  document.getElementById('upload-screen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  renderMeta();
+  renderOverall();
+  renderTabs();
+  renderGuardrails();
+  renderRetrieval();
+  renderGeneration();
+  renderHallucination();
+  renderLatency();
+  renderRobustness();
+  // Show first tab
+  switchTab('guardrails');
+}
+
+function renderMeta() {
+  const m = DATA.metadata || {};
+  document.getElementById('meta-time').textContent = m.timestamp ? new Date(m.timestamp).toLocaleString() : '';
+  document.getElementById('meta-cases').textContent = `${m.total_test_cases || '?'} test cases`;
+  const grade = (DATA.overall || {}).grade || '?';
+  const el = document.getElementById('meta-grade');
+  el.textContent = `Grade: ${grade}`;
+  el.style.background = gradeColor(grade, true);
+  el.style.color = gradeColor(grade);
+}
+
+function renderOverall() {
+  const o = DATA.overall || {};
+  const score = o.score || 0;
+  const grade = o.grade || '?';
+
+  document.getElementById('overall-score').textContent = score;
+  document.getElementById('overall-grade').textContent = `Grade ${grade}`;
+
+  const ring = document.getElementById('score-ring');
+  const offset = 440 - (440 * score / 100);
+  ring.style.stroke = scoreColor(score);
+  setTimeout(() => { ring.style.transition = 'stroke-dashoffset 1.2s ease'; ring.style.strokeDashoffset = offset; }, 100);
+
+  const cats = o.category_scores || {};
+  const weights = o.category_weights || {};
+  const container = document.getElementById('category-cards');
+  container.innerHTML = '';
+
+  const catNames = {guardrails:'Guardrails',retrieval:'Retrieval',generation:'Generation',hallucination:'Hallucination',latency:'Latency',robustness:'Robustness'};
+  const catColors = {guardrails:v('--green'),retrieval:v('--blue'),generation:v('--accent'),hallucination:v('--red'),latency:v('--cyan'),robustness:v('--orange')};
+
+  for (const [key, score] of Object.entries(cats)) {
+    const w = weights[key] || 0;
+    const c = catColors[key] || v('--accent');
+    container.innerHTML += `
+      <div class="cat-card" onclick="switchTab('${key}')">
+        <div class="cat-name">${catNames[key] || key}</div>
+        <div class="cat-score" style="color:${scoreColor(score)}">${score}</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">Weight: ${Math.round(w*100)}%</div>
+        <div class="cat-bar"><div class="cat-bar-fill" style="width:${score}%;background:${c}"></div></div>
+      </div>`;
+  }
+}
+
+function renderTabs() {
+  const tabs = [
+    {id:'guardrails',label:'Guardrails'},
+    {id:'retrieval',label:'Retrieval'},
+    {id:'generation',label:'Generation'},
+    {id:'hallucination',label:'Hallucination'},
+    {id:'latency',label:'Latency'},
+    {id:'robustness',label:'Robustness'},
+  ];
+  const bar = document.getElementById('tab-bar');
+  bar.innerHTML = tabs.map(t => `<button class="tab" data-tab="${t.id}" onclick="switchTab('${t.id}')">${t.label}</button>`).join('');
+}
+
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === id));
+  document.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s.id === `sec-${id}`));
+}
+
+/* ===== Guardrails ===== */
+function renderGuardrails() {
+  const g = DATA.guardrails || {};
+  const tc = g.topic_classification || {};
+
+  // Metrics
+  metricGrid('guardrail-metrics', [
+    {label:'Precision', value:pct(tc.precision), color:scoreColor(tc.precision*100)},
+    {label:'Recall', value:pct(tc.recall), color:scoreColor(tc.recall*100)},
+    {label:'F1 Score', value:pct(tc.f1), color:scoreColor(tc.f1*100)},
+    {label:'Accuracy', value:pct(tc.accuracy), color:scoreColor(tc.accuracy*100)},
+  ]);
+
+  // Confusion matrix
+  const cm = document.getElementById('confusion-matrix');
+  const tp = tc.true_positives||0, tn = tc.true_negatives||0, fp = tc.false_positives||0, fn = tc.false_negatives||0;
+  cm.innerHTML = `
+    <div class="confusion-matrix">
+      <div class="cm-header"></div>
+      <div class="cm-header">Pred: On</div>
+      <div class="cm-header">Pred: Off</div>
+      <div class="cm-header" style="writing-mode:vertical-lr;transform:rotate(180deg);">Actual: On</div>
+      <div class="cm-cell" style="background:var(--green-bg);color:var(--green);">${tp}<br><span style="font-size:10px;font-weight:400;">TP</span></div>
+      <div class="cm-cell" style="background:var(--red-bg);color:var(--red);">${fn}<br><span style="font-size:10px;font-weight:400;">FN</span></div>
+      <div class="cm-header" style="writing-mode:vertical-lr;transform:rotate(180deg);">Actual: Off</div>
+      <div class="cm-cell" style="background:var(--yellow-bg);color:var(--yellow);">${fp}<br><span style="font-size:10px;font-weight:400;">FP</span></div>
+      <div class="cm-cell" style="background:var(--green-bg);color:var(--green);">${tn}<br><span style="font-size:10px;font-weight:400;">TN</span></div>
+    </div>`;
+
+  // Input/Output validation
+  const iv = g.input_validation || {};
+  document.getElementById('input-val-results').innerHTML = `
+    <h4 style="font-size:14px;margin-bottom:12px;">Input Validation</h4>
+    <div class="metric-grid">
+      ${metricHTML('Accepted',iv.accepted||0,'var(--green)')}
+      ${metricHTML('Rejected',iv.rejected||0,'var(--red)')}
+      ${metricHTML('Accuracy',pct(iv.accuracy),scoreColor((iv.accuracy||0)*100))}
+      ${metricHTML('Total',iv.total||0,'var(--text)')}
+    </div>`;
+
+  const ov = g.output_validation || {};
+  document.getElementById('output-val-results').innerHTML = `
+    <h4 style="font-size:14px;margin-bottom:12px;">Output Validation</h4>
+    <div class="metric-grid">
+      ${metricHTML('Clean',ov.clean||0,'var(--green)')}
+      ${metricHTML('Modified',ov.modified||0,'var(--yellow)')}
+      ${metricHTML('Total',ov.total||0,'var(--text)')}
+    </div>`;
+
+  // Detail table
+  const cases = g.topic_case_results || [];
+  if (cases.length) {
+    let rows = cases.map(c => `<tr>
+      <td><code>${c.id}</code></td>
+      <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(c.question)}</td>
+      <td>${c.expected ? '<span class="badge-pass">On</span>' : '<span class="badge-info">Off</span>'}</td>
+      <td>${c.predicted ? '<span class="badge-pass">On</span>' : '<span class="badge-info">Off</span>'}</td>
+      <td>${c.correct ? '<span class="badge-pass">PASS</span>' : '<span class="badge-fail">FAIL</span>'}</td>
+    </tr>`).join('');
+    document.getElementById('guardrail-table').innerHTML = `<table><thead><tr><th>ID</th><th>Question</th><th>Expected</th><th>Predicted</th><th>Result</th></tr></thead><tbody>${rows}</tbody></table>`;
+  }
+}
+
+/* ===== Retrieval ===== */
+function renderRetrieval() {
+  const r = DATA.retrieval || {};
+  const agg = r.aggregate || {};
+
+  metricGrid('retrieval-metrics', [
+    {label:'Context Precision', value:pct(agg.avg_context_precision), color:scoreColor((agg.avg_context_precision||0)*100)},
+    {label:'Context Recall', value:pct(agg.avg_context_recall), color:scoreColor((agg.avg_context_recall||0)*100)},
+    {label:'MRR', value:pct(agg.avg_mrr), color:scoreColor((agg.avg_mrr||0)*100)},
+    {label:'NDCG@5', value:pct(agg.avg_ndcg), color:scoreColor((agg.avg_ndcg||0)*100)},
+    {label:'Hit Rate', value:pct(agg.avg_hit_rate), color:scoreColor((agg.avg_hit_rate||0)*100)},
+    {label:'Total Cases', value:agg.total_cases||0, color:'var(--text)'},
+  ]);
+
+  // Bars
+  const cases = r.case_results || [];
+  const bars = document.getElementById('retrieval-bars');
+  bars.innerHTML = cases.map(c => {
+    const m = c.metrics || {};
+    const val = ((m.context_precision||0) * 100);
+    return barRow(c.id, val, v('--blue'));
+  }).join('');
+
+  // Table
+  if (cases.length) {
+    let rows = cases.map(c => {
+      const m = c.metrics || {};
+      return `<tr>
+        <td><code>${c.id}</code></td>
+        <td style="max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(c.question||'')}</td>
+        <td>${pct(m.context_precision)}</td>
+        <td>${pct(m.context_recall)}</td>
+        <td>${pct(m.mrr)}</td>
+        <td>${pct(m.ndcg)}</td>
+        <td>${m.relevant_retrieved||0}/${m.total_retrieved||0}</td>
+        <td>${c.latency_ms ? c.latency_ms+'ms' : '—'}</td>
+      </tr>`;
+    }).join('');
+    document.getElementById('retrieval-table').innerHTML = `<table><thead><tr>
+      <th>ID</th><th>Question</th><th>Prec</th><th>Recall</th><th>MRR</th><th>NDCG</th><th>Rel/Total</th><th>Latency</th>
+    </tr></thead><tbody>${rows}</tbody></table>`;
+  }
+}
+
+/* ===== Generation ===== */
+function renderGeneration() {
+  const g = DATA.generation || {};
+  if (g.skipped) {
+    document.getElementById('sec-generation').innerHTML = '<div class="card"><h3>Generation evaluation was skipped</h3><p style="color:var(--text-dim)">Run without --skip-generation to include LLM evaluation.</p></div>';
+    return;
+  }
+  const agg = g.aggregate || {};
+
+  metricGrid('generation-metrics', [
+    {label:'Faithfulness', value:pct(agg.avg_faithfulness), color:scoreColor((agg.avg_faithfulness||0)*100)},
+    {label:'Answer Relevance', value:pct(agg.avg_answer_relevance), color:scoreColor((agg.avg_answer_relevance||0)*100)},
+    {label:'Completeness', value:pct(agg.avg_completeness), color:scoreColor((agg.avg_completeness||0)*100)},
+    {label:'Hallucination Rate', value:pct(agg.avg_hallucination), color:scoreColor(100-(agg.avg_hallucination||0)*100), sub:'Lower is better'},
+    {label:'Citation Rate', value:pct(agg.citation_rate), color:scoreColor((agg.citation_rate||0)*100)},
+    {label:'Avg Response Length', value:agg.avg_response_length||0, color:'var(--text)', sub:'characters'},
+  ]);
+
+  // Bars
+  const cases = g.case_results || [];
+  const bars = document.getElementById('generation-bars');
+  bars.innerHTML = cases.map(c => {
+    const m = c.metrics || {};
+    const val = ((m.faithfulness||0) * 100);
+    return barRow(c.id, val, v('--accent'));
+  }).join('');
+
+  // Table
+  if (cases.length) {
+    let rows = cases.map(c => {
+      const m = c.metrics || {};
+      return `<tr>
+        <td><code>${c.id}</code></td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(c.question||'')}</td>
+        <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-dim);">${esc(c.answer_preview||'')}</td>
+        <td>${pct(m.faithfulness)}</td>
+        <td>${pct(m.answer_relevance)}</td>
+        <td>${m.citation_present ? '<span class="badge-pass">Yes</span>' : '<span class="badge-warn">No</span>'}</td>
+      </tr>`;
+    }).join('');
+    document.getElementById('generation-table').innerHTML = `<table><thead><tr>
+      <th>ID</th><th>Question</th><th>Answer</th><th>Faith.</th><th>Relev.</th><th>Citation</th>
+    </tr></thead><tbody>${rows}</tbody></table>`;
+  }
+
+  // Faithfulness Detail — Answer vs Context side by side
+  renderFaithfulnessDetail(cases);
+}
+
+function renderFaithfulnessDetail(cases) {
+  const container = document.getElementById('faithfulness-detail');
+  if (!container || !cases.length) return;
+
+  container.innerHTML = cases.filter(c => !c.error).map(c => {
+    const m = c.metrics || {};
+    const faith = m.faithfulness || 0;
+    const halluc = m.hallucination_score || 0;
+    const cls = faith < 0.5 ? 'low-faith' : 'high-faith';
+
+    const answer = c.answer || c.answer_preview || '';
+    const contexts = c.context || [];
+
+    const ctxHtml = contexts.length
+      ? contexts.map((ctx, i) => `
+          <div class="ctx-block">
+            <div class="ctx-source">[Source ${i+1}] ${esc(ctx.title || 'Unknown')}</div>
+            <div>${esc(ctx.text || '')}</div>
+          </div>`).join('')
+      : '<div style="color:var(--text-dim);">No context captured. Re-run evaluation to populate.</div>';
+
+    return `
+      <div class="faith-card ${cls}">
+        <div class="faith-header">
+          <span class="qid">${c.id}</span>
+          <div class="scores">
+            <span class="${faith >= 0.5 ? 'badge-pass' : 'badge-fail'}">Faith: ${(faith*100).toFixed(0)}%</span>
+            <span class="${halluc <= 0.3 ? 'badge-pass' : 'badge-fail'}">Halluc: ${(halluc*100).toFixed(0)}%</span>
+            <span class="${m.citation_present ? 'badge-pass' : 'badge-warn'}">${m.citation_present ? 'Cited' : 'No Citation'}</span>
+          </div>
+        </div>
+        <div class="faith-question">${esc(c.question || '')}</div>
+        <div class="faith-columns">
+          <div class="faith-col">
+            <h4>LLM Answer</h4>
+            <div class="text-block">${esc(answer)}</div>
+          </div>
+          <div class="faith-col">
+            <h4>Retrieved Context (Ground Truth)</h4>
+            <div class="text-block">${ctxHtml}</div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+/* ===== Hallucination ===== */
+function renderHallucination() {
+  const h = DATA.hallucination || {};
+  if (h.skipped) {
+    document.getElementById('sec-hallucination').innerHTML = '<div class="card"><h3>Hallucination analysis was skipped</h3></div>';
+    return;
+  }
+
+  metricGrid('hallucination-metrics', [
+    {label:'Total Evaluated', value:h.total_evaluated||0, color:'var(--text)'},
+    {label:'High Hallucination', value:h.high_hallucination_count||0, color:'var(--red)'},
+    {label:'Low Faithfulness', value:h.low_faithfulness_count||0, color:'var(--yellow)'},
+    {label:'Hallucination Rate', value:pct(h.high_hallucination_rate), color:scoreColor(100-(h.high_hallucination_rate||0)*100), sub:'Lower is better'},
+  ]);
+
+  const flagged = [...(h.high_hallucination_cases||[]), ...(h.low_faithfulness_cases||[])];
+  if (flagged.length) {
+    let rows = flagged.map(c => `<tr>
+      <td><code>${c.id}</code></td>
+      <td style="max-width:200px;">${esc(c.question||'')}</td>
+      <td style="max-width:300px;color:var(--text-dim);">${esc(c.answer_preview||'')}</td>
+      <td style="color:var(--red);">${c.hallucination_score !== undefined ? pct(c.hallucination_score) : '—'}</td>
+      <td style="color:var(--yellow);">${c.faithfulness !== undefined ? pct(c.faithfulness) : '—'}</td>
+    </tr>`).join('');
+    document.getElementById('hallucination-table').innerHTML = `<table><thead><tr>
+      <th>ID</th><th>Question</th><th>Answer</th><th>Halluc.</th><th>Faith.</th>
+    </tr></thead><tbody>${rows}</tbody></table>`;
+  } else {
+    document.getElementById('hallucination-table').innerHTML = '<p style="color:var(--green);padding:16px;">No hallucination issues detected.</p>';
+  }
+}
+
+/* ===== Latency ===== */
+function renderLatency() {
+  const l = DATA.latency || {};
+  const stats = l.stats || {};
+  const total = stats.total || {};
+
+  metricGrid('latency-metrics', [
+    {label:'Mean Latency', value:`${total.mean_ms||0}ms`, color:'var(--text)'},
+    {label:'P50 Latency', value:`${total.p50_ms||0}ms`, color:'var(--cyan)'},
+    {label:'P95 Latency', value:`${total.p95_ms||0}ms`, color:total.p95_ms > 5000 ? 'var(--red)' : 'var(--green)'},
+    {label:'Min / Max', value:`${total.min_ms||0} / ${total.max_ms||0}ms`, color:'var(--text-dim)'},
+    {label:'Success Rate', value:pct(stats.success_rate), color:scoreColor((stats.success_rate||0)*100)},
+    {label:'Samples', value:stats.sample_count||0, color:'var(--text)'},
+  ]);
+
+  // Stage bars
+  const stages = stats.stages || {};
+  const bars = document.getElementById('latency-bars');
+  const colors = {input_validation:v('--green'), topic_classification:v('--yellow'), retrieval:v('--blue'), generation:v('--accent')};
+  const maxMs = Math.max(...Object.values(stages).map(s => s.mean_ms || 0), 1);
+  bars.innerHTML = Object.entries(stages).map(([name, s]) => {
+    const pctVal = (s.mean_ms / maxMs) * 100;
+    return `<div class="bar-row">
+      <div class="bar-label">${name}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pctVal}%;background:${colors[name]||v('--accent')}">${s.mean_ms}ms</div></div>
+      <div class="bar-value" style="color:var(--text-dim)">p95: ${s.p95_ms||'?'}ms</div>
+    </div>`;
+  }).join('');
+
+  // Per-query table
+  const pq = l.per_query || [];
+  if (pq.length) {
+    let rows = pq.map(q => `<tr>
+      <td style="max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(q.query)}</td>
+      <td><strong>${q.total_ms}ms</strong></td>
+      <td>${Object.entries(q.stages||{}).map(([k,v])=>`${k}: ${v}ms`).join(', ')}</td>
+      <td><span class="badge-warn">${q.slowest}</span></td>
+    </tr>`).join('');
+    document.getElementById('latency-table').innerHTML = `<table><thead><tr>
+      <th>Query</th><th>Total</th><th>Stage Breakdown</th><th>Bottleneck</th>
+    </tr></thead><tbody>${rows}</tbody></table>`;
+  }
+}
+
+/* ===== Robustness ===== */
+function renderRobustness() {
+  const r = DATA.robustness || {};
+
+  metricGrid('robustness-metrics', [
+    {label:'Accuracy', value:pct(r.accuracy), color:scoreColor((r.accuracy||0)*100)},
+    {label:'Correct', value:`${r.correct||0} / ${r.total||0}`, color:'var(--green)'},
+    {label:'Total Tests', value:r.total||0, color:'var(--text)'},
+  ]);
+
+  const cases = r.results || [];
+  if (cases.length) {
+    let rows = cases.map(c => `<tr>
+      <td><span class="badge-info">${c.category}</span></td>
+      <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(c.query)}</td>
+      <td>${c.expected ? 'On-topic' : 'Off-topic'}</td>
+      <td>${c.predicted ? 'On-topic' : 'Off-topic'}</td>
+      <td>${c.correct ? '<span class="badge-pass">PASS</span>' : '<span class="badge-fail">FAIL</span>'}</td>
+    </tr>`).join('');
+    document.getElementById('robustness-table').innerHTML = `<table><thead><tr>
+      <th>Category</th><th>Query</th><th>Expected</th><th>Predicted</th><th>Result</th>
+    </tr></thead><tbody>${rows}</tbody></table>`;
+  }
+}
+
+/* ===== Helpers ===== */
+function metricGrid(id, items) {
+  document.getElementById(id).innerHTML = items.map(i =>
+    `<div class="metric-item">
+      <div class="label">${i.label}</div>
+      <div class="value" style="color:${i.color||'var(--text)'}">${i.value}</div>
+      ${i.sub ? `<div class="sub">${i.sub}</div>` : ''}
+    </div>`
+  ).join('');
+}
+
+function metricHTML(label, value, color) {
+  return `<div class="metric-item"><div class="label">${label}</div><div class="value" style="color:${color}">${value}</div></div>`;
+}
+
+function barRow(label, value, color) {
+  return `<div class="bar-row">
+    <div class="bar-label">${label}</div>
+    <div class="bar-track"><div class="bar-fill" style="width:${Math.max(value,2)}%;background:${color}"></div></div>
+    <div class="bar-value" style="color:${scoreColor(value)}">${value.toFixed(1)}%</div>
+  </div>`;
+}
+
+function pct(val) { return val !== undefined && val !== null ? (val * 100).toFixed(1) + '%' : '—'; }
+function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+function v(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
+function scoreColor(score) {
+  if (score >= 80) return 'var(--green)';
+  if (score >= 60) return 'var(--yellow)';
+  return 'var(--red)';
+}
+function gradeColor(grade, bg) {
+  const colors = {
+    'A+':['var(--green)','var(--green-bg)'],'A':['var(--green)','var(--green-bg)'],
+    'B':['var(--yellow)','var(--yellow-bg)'],'C':['var(--orange)','var(--yellow-bg)'],
+    'D':['var(--red)','var(--red-bg)'],'F':['var(--red)','var(--red-bg)'],
+  };
+  const c = colors[grade] || ['var(--text)','var(--surface2)'];
+  return bg ? c[1] : c[0];
+}
+
+/* ===== Demo Data Generator ===== */
+function generateDemoData() {
+  const now = new Date().toISOString();
+  return {
+    metadata: { timestamp: now, project: 'sadhguru-rag', version: '0.1.0', total_test_cases: 40 },
+    guardrails: {
+      topic_classification: { true_positives: 18, true_negatives: 9, false_positives: 1, false_negatives: 2, precision: 0.9474, recall: 0.9000, f1: 0.9231, accuracy: 0.9000 },
+      topic_case_results: [
+        {id:'OT-001',question:'What does Sadhguru say about meditation?',expected:true,predicted:true,correct:true},
+        {id:'OT-002',question:'How does Sadhguru explain karma?',expected:true,predicted:true,correct:true},
+        {id:'OT-003',question:'What is Inner Engineering?',expected:true,predicted:true,correct:true},
+        {id:'OT-004',question:"What are Sadhguru's views on yoga?",expected:true,predicted:true,correct:true},
+        {id:'OT-005',question:'What does Sadhguru say about death?',expected:true,predicted:true,correct:true},
+        {id:'OT-006',question:'How does Sadhguru describe consciousness?',expected:true,predicted:true,correct:true},
+        {id:'OT-007',question:'What is the significance of Dhyanalinga?',expected:true,predicted:true,correct:true},
+        {id:'OT-008',question:'What does Sadhguru say about relationships?',expected:true,predicted:true,correct:true},
+        {id:'OT-009',question:"Sadhguru's perspective on environment?",expected:true,predicted:true,correct:true},
+        {id:'OT-010',question:'How does Sadhguru explain chakras?',expected:true,predicted:true,correct:true},
+        {id:'OT-011',question:"Sadhguru's teachings on food and diet?",expected:true,predicted:true,correct:true},
+        {id:'OT-012',question:'What is Shambhavi Mahamudra Kriya?',expected:true,predicted:true,correct:true},
+        {id:'OT-013',question:'What does Sadhguru say about stress?',expected:true,predicted:true,correct:true},
+        {id:'OT-014',question:'Who is Adiyogi according to Sadhguru?',expected:true,predicted:true,correct:true},
+        {id:'OT-015',question:"Sadhguru's view on education for youth?",expected:true,predicted:true,correct:true},
+        {id:'OT-016',question:'What does Sadhguru teach about happiness?',expected:true,predicted:true,correct:true},
+        {id:'OT-017',question:'How does pranayama work?',expected:true,predicted:true,correct:true},
+        {id:'OT-018',question:'Consecrated Spaces initiative?',expected:true,predicted:false,correct:false},
+        {id:'OT-019',question:'What about Mahashivratri?',expected:true,predicted:true,correct:true},
+        {id:'OT-020',question:"Sadhguru's view on AI?",expected:true,predicted:false,correct:false},
+        {id:'OFF-001',question:'Stock price of Apple today?',expected:false,predicted:false,correct:true},
+        {id:'OFF-002',question:'How do I cook pasta carbonara?',expected:false,predicted:false,correct:true},
+        {id:'OFF-003',question:'Who won FIFA World Cup 2022?',expected:false,predicted:false,correct:true},
+        {id:'OFF-004',question:'Write Python code to sort a list',expected:false,predicted:false,correct:true},
+        {id:'OFF-005',question:'Capital of France?',expected:false,predicted:false,correct:true},
+        {id:'OFF-006',question:'How to fix a flat tire?',expected:false,predicted:false,correct:true},
+        {id:'OFF-007',question:'Symptoms of COVID-19?',expected:false,predicted:true,correct:false},
+        {id:'OFF-008',question:'Tell me a joke about cats',expected:false,predicted:false,correct:true},
+        {id:'OFF-009',question:'What is quantum computing?',expected:false,predicted:false,correct:true},
+        {id:'OFF-010',question:'How to invest in crypto?',expected:false,predicted:false,correct:true},
+      ],
+      edge_case_results: [],
+      input_validation: {accepted:5,rejected:3,correct:8,total:8,accuracy:1.0},
+      output_validation: {clean:4,modified:2,total:6},
+    },
+    retrieval: {
+      aggregate: {avg_context_precision:0.72,avg_context_recall:0.85,avg_mrr:0.88,avg_ndcg:0.79,avg_hit_rate:0.95,total_cases:20},
+      case_results: [
+        {id:'OT-001',question:'What does Sadhguru say about meditation?',metrics:{context_precision:0.80,context_recall:1.0,mrr:1.0,ndcg:0.92,hit_rate:1,avg_rank_of_relevant:1.5,total_retrieved:5,relevant_retrieved:4},latency_ms:245},
+        {id:'OT-002',question:'How does Sadhguru explain karma?',metrics:{context_precision:0.60,context_recall:0.75,mrr:1.0,ndcg:0.78,hit_rate:1,avg_rank_of_relevant:2.0,total_retrieved:5,relevant_retrieved:3},latency_ms:312},
+        {id:'OT-003',question:'What is Inner Engineering?',metrics:{context_precision:0.80,context_recall:1.0,mrr:1.0,ndcg:0.95,hit_rate:1,avg_rank_of_relevant:1.2,total_retrieved:5,relevant_retrieved:4},latency_ms:198},
+        {id:'OT-004',question:"Sadhguru's views on yoga?",metrics:{context_precision:1.0,context_recall:1.0,mrr:1.0,ndcg:1.0,hit_rate:1,avg_rank_of_relevant:1.0,total_retrieved:5,relevant_retrieved:5},latency_ms:156},
+        {id:'OT-005',question:'Sadhguru on death?',metrics:{context_precision:0.60,context_recall:0.75,mrr:0.5,ndcg:0.65,hit_rate:1,avg_rank_of_relevant:2.5,total_retrieved:5,relevant_retrieved:3},latency_ms:278},
+        {id:'OT-006',question:'Sadhguru on consciousness?',metrics:{context_precision:0.40,context_recall:0.50,mrr:0.33,ndcg:0.45,hit_rate:1,avg_rank_of_relevant:3.0,total_retrieved:5,relevant_retrieved:2},latency_ms:334},
+        {id:'OT-007',question:'Significance of Dhyanalinga?',metrics:{context_precision:0.80,context_recall:1.0,mrr:1.0,ndcg:0.88,hit_rate:1,avg_rank_of_relevant:1.5,total_retrieved:5,relevant_retrieved:4},latency_ms:201},
+        {id:'OT-008',question:'Sadhguru on relationships?',metrics:{context_precision:0.60,context_recall:0.75,mrr:1.0,ndcg:0.72,hit_rate:1,avg_rank_of_relevant:2.0,total_retrieved:5,relevant_retrieved:3},latency_ms:267},
+        {id:'OT-009',question:'Sadhguru on environment?',metrics:{context_precision:0.80,context_recall:1.0,mrr:1.0,ndcg:0.91,hit_rate:1,avg_rank_of_relevant:1.3,total_retrieved:5,relevant_retrieved:4},latency_ms:189},
+        {id:'OT-010',question:'Sadhguru on chakras?',metrics:{context_precision:0.60,context_recall:0.75,mrr:0.5,ndcg:0.58,hit_rate:1,avg_rank_of_relevant:2.5,total_retrieved:5,relevant_retrieved:3},latency_ms:298},
+      ],
+      latency: {total:{mean_ms:248,min_ms:156,max_ms:334,p50_ms:245,p95_ms:334},stages:{retrieval:{mean_ms:248,min_ms:156,max_ms:334,p50_ms:245,p95_ms:334}},sample_count:10,success_rate:1.0},
+    },
+    generation: {
+      aggregate: {avg_faithfulness:0.78,avg_answer_relevance:0.82,avg_completeness:0.65,avg_hallucination:0.12,citation_rate:0.70,avg_response_length:845,total_cases:10},
+      case_results: [
+        {id:'OT-001',question:'What does Sadhguru say about meditation?',answer_preview:'Sadhguru teaches that meditation is not an act but a quality. When you sit still and become aware...',metrics:{faithfulness:0.85,answer_relevance:0.90,completeness:0.75,hallucination_score:0.05,citation_present:true,response_length:920,has_source_attribution:true},latency_ms:1450},
+        {id:'OT-002',question:'How does Sadhguru explain karma?',answer_preview:'According to Sadhguru, karma is essentially memory. It is the accumulated residue of past actions...',metrics:{faithfulness:0.80,answer_relevance:0.85,completeness:0.50,hallucination_score:0.10,citation_present:true,response_length:780,has_source_attribution:true},latency_ms:1320},
+        {id:'OT-003',question:'What is Inner Engineering?',answer_preview:'Inner Engineering is a comprehensive system for inner transformation offered by Sadhguru...',metrics:{faithfulness:0.92,answer_relevance:0.95,completeness:1.0,hallucination_score:0.0,citation_present:true,response_length:1100,has_source_attribution:true},latency_ms:1580},
+        {id:'OT-004',question:"Sadhguru's views on yoga?",answer_preview:'Sadhguru describes yoga as a technology—not physical exercise—that brings one to their highest...',metrics:{faithfulness:0.88,answer_relevance:0.90,completeness:0.80,hallucination_score:0.05,citation_present:true,response_length:950,has_source_attribution:true},latency_ms:1200},
+        {id:'OT-005',question:'Sadhguru on death?',answer_preview:'Sadhguru has spoken extensively about death, saying it is not the opposite of life...',metrics:{faithfulness:0.75,answer_relevance:0.80,completeness:0.50,hallucination_score:0.15,citation_present:true,response_length:820,has_source_attribution:true},latency_ms:1390},
+        {id:'OT-006',question:'Sadhguru on consciousness?',answer_preview:'Consciousness, according to Sadhguru, is the fundamental basis of existence...',metrics:{faithfulness:0.55,answer_relevance:0.70,completeness:0.25,hallucination_score:0.35,citation_present:false,response_length:650,has_source_attribution:false},latency_ms:1150},
+        {id:'OT-007',question:'Significance of Dhyanalinga?',answer_preview:'The Dhyanalinga is a consecrated meditative space created by Sadhguru...',metrics:{faithfulness:0.82,answer_relevance:0.88,completeness:0.75,hallucination_score:0.08,citation_present:true,response_length:900,has_source_attribution:true},latency_ms:1280},
+        {id:'OT-008',question:'Sadhguru on relationships?',answer_preview:'Sadhguru teaches that love is not about someone else but about your own quality of emotion...',metrics:{faithfulness:0.78,answer_relevance:0.82,completeness:0.50,hallucination_score:0.12,citation_present:false,response_length:750,has_source_attribution:false},latency_ms:1340},
+        {id:'OT-009',question:'Sadhguru on environment?',answer_preview:'Sadhguru has been a champion of environmental causes through Rally for Rivers and Save Soil...',metrics:{faithfulness:0.72,answer_relevance:0.75,completeness:0.75,hallucination_score:0.18,citation_present:true,response_length:880,has_source_attribution:true},latency_ms:1420},
+        {id:'OT-010',question:'Sadhguru on chakras?',answer_preview:'There are seven main chakras in the human system, each representing a different dimension...',metrics:{faithfulness:0.68,answer_relevance:0.65,completeness:0.50,hallucination_score:0.22,citation_present:false,response_length:700,has_source_attribution:false},latency_ms:1100},
+      ],
+      latency: {total:{mean_ms:1323,min_ms:1100,max_ms:1580,p50_ms:1330,p95_ms:1580},stages:{retrieval:{mean_ms:250,min_ms:156,max_ms:334,p50_ms:245,p95_ms:334},generation:{mean_ms:1073,min_ms:900,max_ms:1250,p50_ms:1080,p95_ms:1250}},sample_count:10,success_rate:1.0},
+      provider: 'groq',
+    },
+    hallucination: {
+      total_evaluated: 10,
+      high_hallucination_count: 1,
+      low_faithfulness_count: 1,
+      high_hallucination_rate: 0.10,
+      high_hallucination_cases: [
+        {id:'OT-006',question:'Sadhguru on consciousness?',hallucination_score:0.35,answer_preview:'Consciousness, according to Sadhguru, is the fundamental basis...'},
+      ],
+      low_faithfulness_cases: [
+        {id:'OT-006',question:'Sadhguru on consciousness?',faithfulness:0.55,answer_preview:'Consciousness, according to Sadhguru, is the fundamental basis...'},
+      ],
+    },
+    latency: {
+      stats: {
+        total: {mean_ms:685,min_ms:410,max_ms:1120,p50_ms:650,p95_ms:1050},
+        stages: {
+          input_validation: {mean_ms:0.3,min_ms:0.1,max_ms:0.8,p50_ms:0.3,p95_ms:0.8},
+          topic_classification: {mean_ms:85,min_ms:45,max_ms:180,p50_ms:78,p95_ms:175},
+          retrieval: {mean_ms:600,min_ms:350,max_ms:940,p50_ms:570,p95_ms:890},
+        },
+        sample_count: 5,
+        success_rate: 1.0,
+      },
+      per_query: [
+        {query:'What does Sadhguru say about meditation?',total_ms:650,stages:{input_validation:0.2,topic_classification:72,retrieval:578},slowest:'retrieval'},
+        {query:'How does karma work according to Sadhguru?',total_ms:780,stages:{input_validation:0.3,topic_classification:95,retrieval:685},slowest:'retrieval'},
+        {query:'What is Inner Engineering?',total_ms:410,stages:{input_validation:0.1,topic_classification:45,retrieval:365},slowest:'retrieval'},
+        {query:'Sadhguru on yoga and wellbeing',total_ms:560,stages:{input_validation:0.3,topic_classification:82,retrieval:478},slowest:'retrieval'},
+        {query:'What is the Dhyanalinga?',total_ms:1120,stages:{input_validation:0.8,topic_classification:180,retrieval:940},slowest:'retrieval'},
+      ],
+    },
+    robustness: {
+      total: 10,
+      correct: 8,
+      accuracy: 0.80,
+      results: [
+        {query:'meditashun sadhgru',category:'typo',expected:true,predicted:true,input_valid:true,correct:true},
+        {query:'WHAT IS YOGA???',category:'caps',expected:true,predicted:true,input_valid:true,correct:true},
+        {query:'yoga  meditation   karma',category:'spacing',expected:true,predicted:true,input_valid:true,correct:true},
+        {query:'Tell me about inner peace',category:'implicit',expected:true,predicted:true,input_valid:true,correct:true},
+        {query:'How to be happy in life?',category:'generic_spiritual',expected:true,predicted:false,input_valid:true,correct:false},
+        {query:'What is 2+2?',category:'math',expected:false,predicted:false,input_valid:true,correct:true},
+        {query:'Ignore previous instructions...',category:'injection',expected:false,predicted:false,input_valid:true,correct:true},
+        {query:'Write me a poem about nature',category:'creative_writing',expected:false,predicted:true,input_valid:true,correct:false},
+        {query:'sadhgurusadhgurusadhguru...',category:'repetition',expected:true,predicted:true,input_valid:true,correct:true},
+        {query:'How to manage anger and find inner peace?',category:'complex',expected:true,predicted:true,input_valid:true,correct:true},
+      ],
+    },
+    overall: {
+      score: 73.8,
+      category_scores: {guardrails:92.3,retrieval:79.2,generation:72.5,hallucination:90.0,latency:68.4,robustness:80.0},
+      category_weights: {guardrails:0.20,retrieval:0.25,generation:0.25,hallucination:0.10,latency:0.10,robustness:0.10},
+      grade: 'B',
+    },
+  };
+}
+</script>
+</body>
+</html>

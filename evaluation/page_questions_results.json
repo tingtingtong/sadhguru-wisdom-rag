@@ -1,0 +1,42 @@
+[
+ {
+  "provider": "flashrank",
+  "n": 60,
+  "gate": false,
+  "hit@5": 0.683,
+  "hit@1": 0.483,
+  "mrr": 0.568,
+  "gate_blocked": 0,
+  "latency_ms_mean": 4699
+ },
+ {
+  "provider": "jev",
+  "n": 60,
+  "gate": false,
+  "hit@5": 0.833,
+  "hit@1": 0.533,
+  "mrr": 0.644,
+  "gate_blocked": 0,
+  "latency_ms_mean": 4287
+ },
+ {
+  "provider": "flashrank",
+  "n": 60,
+  "gate": true,
+  "hit@5": 0.633,
+  "hit@1": 0.433,
+  "mrr": 0.518,
+  "gate_blocked": 4,
+  "latency_ms_mean": 4166
+ },
+ {
+  "provider": "jev",
+  "n": 60,
+  "gate": true,
+  "hit@5": 0.867,
+  "hit@1": 0.533,
+  "mrr": 0.657,
+  "gate_blocked": 0,
+  "latency_ms_mean": 4189
+ }
+]

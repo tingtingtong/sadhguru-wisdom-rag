@@ -1,0 +1,53 @@
+[project]
+name = "sadhguru-rag"
+version = "0.1.0"
+description = "Enterprise RAG application for Sadhguru's wisdom"
+requires-python = ">=3.11"
+dependencies = [
+    # API
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "slowapi>=0.1.9",
+    # LLM
+    "groq>=0.11.0",
+    "ollama>=0.4.0",
+    # Embeddings & Reranking
+    "sentence-transformers>=3.3.0",
+    "flashrank>=0.2.0",
+    # Vector DB
+    "qdrant-client>=1.12.0",
+    # Scraping
+    "crawl4ai>=0.4.0",
+    # Chunking
+    "langchain-text-splitters>=0.3.0",
+    # Observability
+    "logfire[fastapi]>=2.0.0",
+    # Config
+    "pydantic-settings>=2.6.0",
+    # Utils
+    "httpx>=0.27.0",
+    "numpy>=1.26.0",
+    "pyyaml>=6.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-httpx>=0.34.0",
+    "ruff>=0.8.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["config*", "scraper*", "ingestion*", "retrieval*", "generation*", "guardrails*", "observability*", "api*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

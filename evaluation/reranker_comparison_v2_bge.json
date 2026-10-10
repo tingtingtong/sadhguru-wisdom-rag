@@ -1,0 +1,339 @@
+[
+  {
+    "provider": "bge",
+    "cases": 20,
+    "errors": 0,
+    "fallback_cases": 0,
+    "aggregate": {
+      "context_precision": 0.84,
+      "context_recall": 0.6533,
+      "mrr": 1.0,
+      "ndcg": 0.919,
+      "hit_rate": 1.0
+    },
+    "latency_ms_mean": 33800.7,
+    "latency_ms_p95": 41602.5,
+    "rows": [
+      {
+        "id": "OT-001",
+        "metrics": {
+          "context_precision": 0.6,
+          "context_recall": 0.25,
+          "mrr": 1.0,
+          "ndcg": 0.906,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 2.67,
+          "total_retrieved": 5,
+          "relevant_retrieved": 3
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-002",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.5,
+          "mrr": 1.0,
+          "ndcg": 0.8447,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-003",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.25,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-004",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.6,
+          "mrr": 1.0,
+          "ndcg": 0.8621,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-005",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.8887,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-006",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.25,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-007",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.9641,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-008",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-009",
+        "metrics": {
+          "context_precision": 0.6,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.9816,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 2.33,
+          "total_retrieved": 5,
+          "relevant_retrieved": 3
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-010",
+        "metrics": {
+          "context_precision": 0.8,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.9663,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 2.75,
+          "total_retrieved": 5,
+          "relevant_retrieved": 4
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-011",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.8,
+          "mrr": 1.0,
+          "ndcg": 0.9914,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-012",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 0.9734,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-013",
+        "metrics": {
+          "context_precision": 0.6,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.936,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 2.67,
+          "total_retrieved": 5,
+          "relevant_retrieved": 3
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-014",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.8442,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-015",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.8491,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-016",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.8548,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-017",
+        "metrics": {
+          "context_precision": 0.4,
+          "context_recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 0.8597,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 1.5,
+          "total_retrieved": 5,
+          "relevant_retrieved": 2
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-018",
+        "metrics": {
+          "context_precision": 0.4,
+          "context_recall": 0.5,
+          "mrr": 1.0,
+          "ndcg": 0.7602,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 2.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 2
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-019",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.5,
+          "mrr": 1.0,
+          "ndcg": 0.9467,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-020",
+        "metrics": {
+          "context_precision": 0.4,
+          "context_recall": 0.6667,
+          "mrr": 1.0,
+          "ndcg": 0.9502,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 2.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 2
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      }
+    ]
+  }
+]

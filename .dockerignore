@@ -1,0 +1,16 @@
+# Never bake secrets or bulky local data into the image
+.env
+.env.*
+!.env.example
+secrets_for_cloud.toml
+.streamlit/secrets.toml
+.git
+data/
+evaluation/*.json
+evaluation/*.html
+**/__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.venv/
+*.egg-info/

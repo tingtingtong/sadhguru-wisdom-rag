@@ -1,0 +1,30 @@
+[
+ {
+  "check": "guardrail scope",
+  "threshold": 0.25,
+  "status": "OK",
+  "in_scope_n": 50,
+  "in_scope_min": 0.3,
+  "in_scope_rejected": 0,
+  "out_of_scope_n": 36,
+  "out_of_scope_max": 0.24,
+  "out_of_scope_accepted": 0,
+  "margin": 0.01,
+  "cleanly_separable": true,
+  "suggested_threshold": 0.27
+ },
+ {
+  "check": "relevance gate",
+  "threshold": 0.18,
+  "status": "WARN",
+  "answerable_n": 54,
+  "answerable_min": 0.2,
+  "answerable_rejected": 0,
+  "unanswerable_n": 22,
+  "unanswerable_max": 0.24,
+  "unanswerable_accepted": 4,
+  "margin": -0.06,
+  "cleanly_separable": false,
+  "suggested_threshold": null
+ }
+]

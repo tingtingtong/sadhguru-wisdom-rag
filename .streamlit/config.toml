@@ -1,0 +1,12 @@
+[theme]
+primaryColor = "#6366f1"
+backgroundColor = "#0e1117"
+secondaryBackgroundColor = "#1e293b"
+textColor = "#e2e8f0"
+font = "sans serif"
+
+[server]
+port = 8512  # 8501 (Streamlit default) is used by the ZerodhaBot app
+headless = true
+enableCORS = false
+enableXsrfProtection = true

@@ -1,0 +1,941 @@
+[
+  {
+    "provider": "flashrank",
+    "cases": 20,
+    "errors": 0,
+    "fallback_cases": 0,
+    "aggregate": {
+      "context_precision": 0.84,
+      "context_recall": 0.5908,
+      "mrr": 0.975,
+      "ndcg": 0.8989,
+      "hit_rate": 1.0
+    },
+    "latency_ms_mean": 3928.5,
+    "latency_ms_p95": 4516.4,
+    "rows": [
+      {
+        "id": "OT-001",
+        "metrics": {
+          "context_precision": 0.8,
+          "context_recall": 0.25,
+          "mrr": 1.0,
+          "ndcg": 0.9829,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 2.75,
+          "total_retrieved": 5,
+          "relevant_retrieved": 4
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      },
+      {
+        "id": "OT-002",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.5,
+          "mrr": 1.0,
+          "ndcg": 0.8447,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      },
+      {
+        "id": "OT-003",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.25,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      },
+      {
+        "id": "OT-004",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.6,
+          "mrr": 1.0,
+          "ndcg": 0.8869,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      },
+      {
+        "id": "OT-005",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.5,
+          "mrr": 1.0,
+          "ndcg": 0.8879,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      },
+      {
+        "id": "OT-006",
+        "metrics": {
+          "context_precision": 0.8,
+          "context_recall": 0.25,
+          "mrr": 1.0,
+          "ndcg": 0.9558,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 4
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      },
+      {
+        "id": "OT-007",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.9641,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      },
+      {
+        "id": "OT-008",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.8491,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      },
+      {
+        "id": "OT-009",
+        "metrics": {
+          "context_precision": 0.6,
+          "context_recall": 0.5,
+          "mrr": 0.5,
+          "ndcg": 0.6392,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.33,
+          "total_retrieved": 5,
+          "relevant_retrieved": 3
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      },
+      {
+        "id": "OT-010",
+        "metrics": {
+          "context_precision": 0.8,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 2.5,
+          "total_retrieved": 5,
+          "relevant_retrieved": 4
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      },
+      {
+        "id": "OT-011",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.8,
+          "mrr": 1.0,
+          "ndcg": 0.9236,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      },
+      {
+        "id": "OT-012",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 0.9734,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      },
+      {
+        "id": "OT-013",
+        "metrics": {
+          "context_precision": 0.6,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.7963,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 2.67,
+          "total_retrieved": 5,
+          "relevant_retrieved": 3
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      },
+      {
+        "id": "OT-014",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.8442,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      },
+      {
+        "id": "OT-015",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.5,
+          "mrr": 1.0,
+          "ndcg": 0.8793,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      },
+      {
+        "id": "OT-016",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.5,
+          "mrr": 1.0,
+          "ndcg": 0.9557,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      },
+      {
+        "id": "OT-017",
+        "metrics": {
+          "context_precision": 0.4,
+          "context_recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 0.8597,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 1.5,
+          "total_retrieved": 5,
+          "relevant_retrieved": 2
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      },
+      {
+        "id": "OT-018",
+        "metrics": {
+          "context_precision": 0.4,
+          "context_recall": 0.25,
+          "mrr": 1.0,
+          "ndcg": 0.9197,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 2.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 2
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      },
+      {
+        "id": "OT-019",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.5,
+          "mrr": 1.0,
+          "ndcg": 0.8661,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      },
+      {
+        "id": "OT-020",
+        "metrics": {
+          "context_precision": 0.4,
+          "context_recall": 0.6667,
+          "mrr": 1.0,
+          "ndcg": 0.9502,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 2.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 2
+        },
+        "reranker_used": [
+          "flashrank"
+        ]
+      }
+    ]
+  },
+  {
+    "provider": "jev",
+    "cases": 20,
+    "errors": 0,
+    "fallback_cases": 0,
+    "aggregate": {
+      "context_precision": 0.89,
+      "context_recall": 0.7308,
+      "mrr": 1.0,
+      "ndcg": 0.8982,
+      "hit_rate": 1.0
+    },
+    "latency_ms_mean": 4343.4,
+    "latency_ms_p95": 4864.8,
+    "rows": [
+      {
+        "id": "OT-001",
+        "metrics": {
+          "context_precision": 0.6,
+          "context_recall": 0.25,
+          "mrr": 1.0,
+          "ndcg": 0.906,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 2.67,
+          "total_retrieved": 5,
+          "relevant_retrieved": 3
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      },
+      {
+        "id": "OT-002",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.5,
+          "mrr": 1.0,
+          "ndcg": 0.8734,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      },
+      {
+        "id": "OT-003",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.5,
+          "mrr": 1.0,
+          "ndcg": 0.8734,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      },
+      {
+        "id": "OT-004",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.4,
+          "mrr": 1.0,
+          "ndcg": 0.8734,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      },
+      {
+        "id": "OT-005",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.8887,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      },
+      {
+        "id": "OT-006",
+        "metrics": {
+          "context_precision": 0.8,
+          "context_recall": 0.25,
+          "mrr": 1.0,
+          "ndcg": 0.9558,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 4
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      },
+      {
+        "id": "OT-007",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 0.9235,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      },
+      {
+        "id": "OT-008",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.8887,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      },
+      {
+        "id": "OT-009",
+        "metrics": {
+          "context_precision": 0.6,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.9816,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 2.33,
+          "total_retrieved": 5,
+          "relevant_retrieved": 3
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      },
+      {
+        "id": "OT-010",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.9671,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      },
+      {
+        "id": "OT-011",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.8,
+          "mrr": 1.0,
+          "ndcg": 0.9244,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      },
+      {
+        "id": "OT-012",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 0.961,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      },
+      {
+        "id": "OT-013",
+        "metrics": {
+          "context_precision": 0.8,
+          "context_recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 0.8131,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 4
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      },
+      {
+        "id": "OT-014",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 0.8616,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      },
+      {
+        "id": "OT-015",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 0.9484,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      },
+      {
+        "id": "OT-016",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 0.8184,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      },
+      {
+        "id": "OT-017",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 0.8118,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      },
+      {
+        "id": "OT-018",
+        "metrics": {
+          "context_precision": 0.6,
+          "context_recall": 0.5,
+          "mrr": 1.0,
+          "ndcg": 0.922,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 3
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      },
+      {
+        "id": "OT-019",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.8208,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      },
+      {
+        "id": "OT-020",
+        "metrics": {
+          "context_precision": 0.4,
+          "context_recall": 0.6667,
+          "mrr": 1.0,
+          "ndcg": 0.9502,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 2.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 2
+        },
+        "reranker_used": [
+          "jev"
+        ]
+      }
+    ]
+  },
+  {
+    "provider": "bge",
+    "cases": 14,
+    "errors": 6,
+    "fallback_cases": 0,
+    "aggregate": {
+      "context_precision": 0.8143,
+      "context_recall": 0.6441,
+      "mrr": 1.0,
+      "ndcg": 0.8911,
+      "hit_rate": 1.0
+    },
+    "latency_ms_mean": 31613.9,
+    "latency_ms_p95": 41792.5,
+    "rows": [
+      {
+        "id": "OT-001",
+        "metrics": {
+          "context_precision": 0.6,
+          "context_recall": 0.25,
+          "mrr": 1.0,
+          "ndcg": 0.906,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 2.67,
+          "total_retrieved": 5,
+          "relevant_retrieved": 3
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-002",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.5,
+          "mrr": 1.0,
+          "ndcg": 0.8447,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-003",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.25,
+          "mrr": 1.0,
+          "ndcg": 1.0,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-004",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.6,
+          "mrr": 1.0,
+          "ndcg": 0.8621,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-005",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.8887,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-006",
+        "error": "Connection error."
+      },
+      {
+        "id": "OT-007",
+        "error": "Connection error."
+      },
+      {
+        "id": "OT-008",
+        "error": "Connection error."
+      },
+      {
+        "id": "OT-009",
+        "error": "Connection error."
+      },
+      {
+        "id": "OT-010",
+        "error": "Connection error."
+      },
+      {
+        "id": "OT-011",
+        "error": "Connection error."
+      },
+      {
+        "id": "OT-012",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 0.9734,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-013",
+        "metrics": {
+          "context_precision": 0.6,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.936,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 2.67,
+          "total_retrieved": 5,
+          "relevant_retrieved": 3
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-014",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.8442,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-015",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.8491,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-016",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.75,
+          "mrr": 1.0,
+          "ndcg": 0.8548,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-017",
+        "metrics": {
+          "context_precision": 0.4,
+          "context_recall": 1.0,
+          "mrr": 1.0,
+          "ndcg": 0.8597,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 1.5,
+          "total_retrieved": 5,
+          "relevant_retrieved": 2
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-018",
+        "metrics": {
+          "context_precision": 0.4,
+          "context_recall": 0.5,
+          "mrr": 1.0,
+          "ndcg": 0.7602,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 2.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 2
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-019",
+        "metrics": {
+          "context_precision": 1.0,
+          "context_recall": 0.5,
+          "mrr": 1.0,
+          "ndcg": 0.9467,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 3.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 5
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      },
+      {
+        "id": "OT-020",
+        "metrics": {
+          "context_precision": 0.4,
+          "context_recall": 0.6667,
+          "mrr": 1.0,
+          "ndcg": 0.9502,
+          "hit_rate": 1.0,
+          "avg_rank_of_relevant": 2.0,
+          "total_retrieved": 5,
+          "relevant_retrieved": 2
+        },
+        "reranker_used": [
+          "bge"
+        ]
+      }
+    ]
+  }
+]
